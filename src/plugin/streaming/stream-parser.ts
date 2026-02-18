@@ -140,7 +140,12 @@ export function findRealTag(buffer: string, tag: string): number {
       }
     }
     if (!inCodeBlock) {
-      return pos
+      const lineStart = buffer.lastIndexOf('\n', pos - 1) + 1
+      const beforeTag = buffer.substring(lineStart, pos)
+      const backtickCount = (beforeTag.match(/`/g) || []).length
+      if (backtickCount % 2 === 0) {
+        return pos
+      }
     }
     pos += tag.length
   }
